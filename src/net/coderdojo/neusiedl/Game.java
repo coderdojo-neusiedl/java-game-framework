@@ -20,6 +20,7 @@ public class Game implements Runnable {
 
     private PlayingField playingField;
     private JButton startStopButton;
+    private Ball ball;
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(new Game());
@@ -45,14 +46,29 @@ public class Game implements Runnable {
 
     private void createPlayingField(JFrame frame) {
         playingField = new PlayingField(PLAYING_FIELD_WIDTH, PLAYING_FIELD_HEIGHT, FRAMES_PER_SECOND);
-        /*
-            Add your components here
-         */
+        Point centerPoint = new Point(200,200);
+        int diameter = 20;
+        Vector movementVector = new Vector(5, 10);
+        Color color = Color.RED;
+        ball = new Ball(centerPoint, diameter, movementVector, color);
+        playingField.add(ball);
         playingField.setOnNextFrameCallback(this::onNextFrame);
         frame.add(playingField);
     }
 
     private void onNextFrame() {
+        Vector vector = ball.getMovementVector();
+        Point centerPoint = ball.getCenterPoint();
+
+        if ((centerPoint.getY() >= PLAYING_FIELD_HEIGHT ) || (centerPoint.getY() <= 0 )) {
+            Vector neueRichtung = new Vector(vector.getX(), -vector.getY());
+            ball.setMovementVector(neueRichtung);
+        }
+        if ((centerPoint.getX() >= PLAYING_FIELD_WIDTH ) || (centerPoint.getX() <= 0 )) {
+            Vector neueRichtung = new Vector(-vector.getX(), vector.getY());
+            ball.setMovementVector(neueRichtung);
+        }
+        ball.move();
         /*
             This is the place where you should add your code to ...
                  * move components

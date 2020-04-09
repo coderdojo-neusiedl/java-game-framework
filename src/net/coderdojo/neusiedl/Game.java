@@ -15,33 +15,30 @@ public class Game implements Runnable {
     private static final int PLAYING_FIELD_WIDTH = 400;
     private static final int PLAYING_FIELD_HEIGHT = 400;
     private static final int FRAMES_PER_SECOND = 25;
+    private static final String WINDOW_TITLE = "DojoGame";
     private static final String START = "start";
     private static final String STOP = "stop";
 
     private PlayingField playingField;
     private JButton startStopButton;
-    private Ball ball;
 
+    /**
+     * Entry point of the program.
+     *
+     * @param args the command line arguments
+     */
     public static void main(String[] args) {
         SwingUtilities.invokeLater(new Game());
     }
 
     @Override
     public void run() {
-        JFrame frame = new JFrame("DojoGame");
+        JFrame frame = new JFrame(WINDOW_TITLE);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         createStartStopButtonInPanel(frame);
         createPlayingField(frame);
         frame.pack();
         frame.setVisible(true);
-    }
-
-    private void createStartStopButtonInPanel(JFrame frame) {
-        JPanel panel = new JPanel();
-        startStopButton = new JButton(START);
-        startStopButton.addActionListener(this::startStopButtonClicked);
-        panel.add(startStopButton);
-        frame.add(panel, BorderLayout.NORTH);
     }
 
     private void createPlayingField(JFrame frame) {
@@ -56,6 +53,13 @@ public class Game implements Runnable {
         frame.add(playingField);
     }
 
+    /**
+     * This method gets called immediately before each component of the game gets painted into the next frame.
+     * Typical activities in this method are:
+     * - moving the components by calling their method move()
+     * - collision detection
+     * - reacting on user input
+     */
     private void onNextFrame() {
         Vector vector = ball.getMovementVector();
         Point centerPoint = ball.getCenterPoint();
@@ -77,8 +81,15 @@ public class Game implements Runnable {
          */
     }
 
-    private void startStopButtonClicked(ActionEvent actionEvent) {
+    private void createStartStopButtonInPanel(JFrame frame) {
+        JPanel panel = new JPanel();
+        startStopButton = new JButton(START);
+        startStopButton.addActionListener(this::startStopButtonClicked);
+        panel.add(startStopButton);
+        frame.add(panel, BorderLayout.NORTH);
+    }
 
+    private void startStopButtonClicked(ActionEvent actionEvent) {
         if (startStopButton.getText().equals(START)) {
             playingField.start();
             startStopButton.setText(STOP);

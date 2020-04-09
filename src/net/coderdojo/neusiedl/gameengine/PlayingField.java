@@ -21,11 +21,11 @@ import java.util.concurrent.atomic.AtomicReference;
 /**
  * PlayingField represents the area where the game takes place. Components can get added or removed by calling the
  * corresponding methods add(component) and remove(component).
- *
- * To start the animation the method start() needs to be called.
- *
+ * <p>
+ * To start the animation the method start() needs to be called. stop() halts the animation.
+ * <p>
  * Use setOnNextFrameCallback(callback) to register a callback method that gets called for each frame before the
- * components get painted. This can be used to e.g. move components.
+ * components get painted. This can be used to e.g. move components, detect collisions, react on user input, ...
  */
 public class PlayingField extends JPanel {
 
@@ -73,7 +73,8 @@ public class PlayingField extends JPanel {
      */
     public void start() {
         if (scheduled.isEmpty()) {
-            scheduled = Optional.of(scheduler.scheduleAtFixedRate(this::paintNextFrame, NO_DELAY, framePeriod.toMillis(), TimeUnit.MILLISECONDS));
+            scheduled = Optional.of(scheduler.scheduleAtFixedRate(this::paintNextFrame, NO_DELAY,
+                    framePeriod.toMillis(), TimeUnit.MILLISECONDS));
         }
     }
 
@@ -96,6 +97,7 @@ public class PlayingField extends JPanel {
 
     /**
      * setOnNextFrameCallback registers the specified runnable to get called before each component of a frame gets painted.
+     *
      * @param runnable the callback that shall get called
      */
     public void setOnNextFrameCallback(Runnable runnable) {

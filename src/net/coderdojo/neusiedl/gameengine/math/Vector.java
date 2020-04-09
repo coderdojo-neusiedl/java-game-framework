@@ -31,6 +31,10 @@ public class Vector {
         return y;
     }
 
+    public double getLength() {
+        return Math.sqrt(Math.pow(this.x, 2) + Math.pow(this.y, 2));
+    }
+
     @Override
     public String toString() {
         return "Vector{" + "x=" + x + ", y=" + y + '}';

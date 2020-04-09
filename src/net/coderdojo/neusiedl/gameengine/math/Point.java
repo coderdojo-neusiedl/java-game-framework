@@ -29,6 +29,10 @@ public class Point {
         return y;
     }
 
+    public Vector getVectorTo(Point point) {
+        return new Vector(point.getX() - this.x, point.getY() - this.y);
+    }
+
     @Override
     public String toString() {
         return "Point{" + "x=" + x + ", y=" + y + '}';

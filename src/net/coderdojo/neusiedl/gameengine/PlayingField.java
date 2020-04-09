@@ -39,7 +39,7 @@ public class PlayingField extends JPanel {
     private BufferedImage image1;
     private BufferedImage image2;
     private AtomicReference<BufferedImage> activeImage = new AtomicReference<>();
-    private Collection<MovableComponent> components = new ArrayList<>();
+    private Collection<MovableComponent> components = Collections.synchronizedCollection(new ArrayList<>());
     private Map<BufferedImage, Collection<Rectangle>> dirtyAreasPerImage = new HashMap<>();
     private ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
     private Optional<Runnable> onNextFrameCallback = Optional.empty();

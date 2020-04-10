@@ -8,6 +8,7 @@ import javax.swing.*;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
+import java.security.Key;
 
 public class Game implements Runnable {
 
@@ -42,6 +43,13 @@ public class Game implements Runnable {
 
     private void createPlayingField(JFrame frame) {
         playingField = new PlayingField(PLAYING_FIELD_WIDTH, PLAYING_FIELD_HEIGHT, FRAMES_PER_SECOND);
+        Point centerPoint = new Point(PLAYING_FIELD_WIDTH/2, 350);
+        int diameter = 20;
+        Vector movementVector = Vector.NO_MOVEMENT;
+        Color color = Color.BLACK;
+        Catcher catcher = new Catcher(centerPoint, diameter, movementVector, color);
+        playingField.add(catcher);
+        new Keyboard(playingField);
         playingField.setOnNextFrameCallback(this::onNextFrame);
         frame.add(playingField);
     }

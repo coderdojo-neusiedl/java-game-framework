@@ -21,6 +21,7 @@ public class Game implements Runnable {
 
     private PlayingField playingField;
     private JButton startStopButton;
+    private Catcher catcher;
 
     /**
      * Entry point of the program.
@@ -47,11 +48,13 @@ public class Game implements Runnable {
         int diameter = 20;
         Vector movementVector = Vector.NO_MOVEMENT;
         Color color = Color.BLACK;
-        Catcher catcher = new Catcher(centerPoint, diameter, movementVector, color);
+         catcher = new Catcher(centerPoint, diameter, movementVector, color);
+
         playingField.add(catcher);
-        new Keyboard(playingField);
+        new Keyboard(playingField, catcher::moveLeft, catcher::moveRight, catcher::stop);
         playingField.setOnNextFrameCallback(this::onNextFrame);
         frame.add(playingField);
+
     }
 
     /**
@@ -62,6 +65,7 @@ public class Game implements Runnable {
      * - reacting on user input
      */
     private void onNextFrame() {
+        catcher.move();
     }
 
     private void createStartStopButtonInPanel(JFrame frame) {

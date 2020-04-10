@@ -11,14 +11,15 @@ public class Catcher extends Ball {
     }
 
     public void moveLeft() {
-        System.out.println("left");
+        setMovementVector(new Vector(-5, 0));
     }
 
+
     public void moveRight() {
-        System.out.println("right");
+        setMovementVector(new Vector(5, 0));
     }
 
     public void stop() {
-        System.out.println("stop");
+        setMovementVector(new Vector(0, 0));
     }
 }

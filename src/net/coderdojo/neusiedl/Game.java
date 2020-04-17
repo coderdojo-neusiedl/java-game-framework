@@ -5,8 +5,7 @@ import net.coderdojo.neusiedl.gameengine.math.Point;
 import net.coderdojo.neusiedl.gameengine.math.Vector;
 
 import javax.swing.*;
-import java.awt.BorderLayout;
-import java.awt.Color;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.security.Key;
 
@@ -22,6 +21,10 @@ public class Game implements Runnable {
     private PlayingField playingField;
     private JButton startStopButton;
     private Catcher catcher;
+    private Ball ball;
+    private int hits;
+    private JTextField score;
+
 
     /**
      * Entry point of the program.
@@ -66,6 +69,26 @@ public class Game implements Runnable {
      */
     private void onNextFrame() {
         catcher.move();
+        if (ball != null) {
+            Point ballCenterPoint = ball.getCenterPoint();
+            if (ballCenterPoint.getY() >= PLAYING_FIELD_HEIGHT) {
+                restartBall();
+            }
+            ball.move();
+            Point catcherCenterPoint = catcher.getCenterPoint();
+            if (Math.abs(ballCenterPoint.getY() - catcherCenterPoint.getY()) < 20) {
+                if (Math.abs(ballCenterPoint.getX() - catcherCenterPoint.getX()) < 20) {
+                    hits = hits + 1;
+                    score.setText("Treffer="+hits);
+                    restartBall();
+                }
+            }
+        }
+    }
+
+    private void restartBall() {
+        playingField.remove(ball);
+        createBall();
     }
 
     private void createStartStopButtonInPanel(JFrame frame) {
@@ -73,12 +96,21 @@ public class Game implements Runnable {
         startStopButton = new JButton(START);
         startStopButton.addActionListener(this::startStopButtonClicked);
         panel.add(startStopButton);
+        score = new JTextField(10);
+        panel.add(score);
         frame.add(panel, BorderLayout.NORTH);
+    }
+
+    private void createBall() {
+        int x = (int) (Math.random() * PLAYING_FIELD_WIDTH);
+        ball = new Ball(new Point(x, 5), 10, new Vector(0, 5), Color.GREEN);
+        playingField.add(ball);
     }
 
     private void startStopButtonClicked(ActionEvent actionEvent) {
         if (startStopButton.getText().equals(START)) {
             playingField.start();
+            createBall();
             startStopButton.setText(STOP);
         } else {
             playingField.stop();
@@ -86,3 +118,4 @@ public class Game implements Runnable {
         }
     }
 }
+     
